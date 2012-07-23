@@ -1,3 +1,6 @@
 include CHANGES LICENSE README
-recursive-include docs *
+
+recursive-include otp_yubikey/fixtures *
+
+recursive-include docs Makefile *.rst *.py
 prune docs/build

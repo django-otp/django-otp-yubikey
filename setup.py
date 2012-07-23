@@ -20,7 +20,7 @@ setup(
         'YubiOTP>=0.2',
     ],
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 2",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
