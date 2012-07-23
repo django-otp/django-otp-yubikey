@@ -6,11 +6,12 @@ from distutils.core import setup
 setup(
     name='django-otp-yubikey',
     version='0.1.0',
-    description='A django-otp plugin that verifies YubiKey OTP tokens locally.',
+    description='A django-otp plugin that verifies YubiKey OTP tokens.',
     long_description=open('README').read(),
     author='Peter Sagerson',
     author_email='psagersDjwublJf@ignorare.net',
     packages=[
+        'otp_yubikey',
     ],
     url='https://bitbucket.org/psagers/django-otp',
     license='BSD',
