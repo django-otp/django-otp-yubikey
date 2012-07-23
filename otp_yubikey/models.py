@@ -51,7 +51,7 @@ class YubikeyDevice(Device):
     def bin_key(self):
         return unhexlify(self.key)
 
-    def verify_token(self, token, peek=False):
+    def verify_token(self, token):
         try:
             public_id, otp = decode_otp(token, self.bin_key)
         except StandardError:
@@ -70,10 +70,9 @@ class YubikeyDevice(Device):
             return False
 
         # All tests pass. Update the counters and return the good news.
-        if not peek:
-            self.session = otp.session
-            self.counter = otp.counter
-            self.save()
+        self.session = otp.session
+        self.counter = otp.counter
+        self.save()
 
         return True
 
@@ -96,10 +95,14 @@ class RemoteYubikeyDevice(Device):
     public_id = models.CharField(max_length=32, help_text=u"The public identity of the YubiKey (modhex-encoded).")
 
     def verify_token(self, token):
-        client = self._get_client()
-        response = client.verify(token)
+        verified = False
 
-        return response.is_ok()
+        if token[:-32] == self.public_id:
+            client = self._get_client()
+            response = client.verify(token)
+            verified = response.is_ok()
+
+        return verified
 
     def _get_client(self):
         version = settings.OTP_YUBIKEY_PROTOCOL_VERSION
