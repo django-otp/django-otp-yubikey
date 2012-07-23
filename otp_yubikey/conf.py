@@ -8,13 +8,10 @@ class Settings(object):
     if they are not specified by the configuration.
     """
     defaults = {
-        'OTP_YUBIKEY_API_ID': 1,
-        'OTP_YUBIKEY_API_KEY': None,
+        'OTP_YUBIKEY_DEFAULT_API_ID': 1,
+        'OTP_YUBIKEY_DEFAULT_API_KEY': '',
+        'OTP_YUBIKEY_DEFAULT_API_VERSION': '2.0',
         'OTP_YUBIKEY_DEFAULT_BASE_URL': '',
-        'OTP_YUBIKEY_PROTOCOL_VERSION': '2.0',
-        'OTP_YUBIKEY_SL': None,
-        'OTP_YUBIKEY_TIMEOUT': None,
-        'OTP_YUBIKEY_USE_SSL': False,
     }
 
     def __init__(self):

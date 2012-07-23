@@ -1,7 +1,7 @@
+from base64 import b64decode
 from binascii import hexlify, unhexlify
 from struct import pack
 
-from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 
 from django_otp.models import Device
@@ -33,10 +33,31 @@ class YubikeyDevice(Device):
 
         The volatile session usage counter most recently used by this device.
     """
-    private_id = models.CharField(max_length=12, validators=[hex_validator(6)], default=lambda: random_hex(6), help_text=u"The 6-byte private ID (hex-encoded).")
-    key = models.CharField(max_length=32, validators=[hex_validator(16)], default=lambda: random_hex(16), help_text=u"The 16-byte AES key shared with this YubiKey (hex-encoded).")
-    session = models.PositiveIntegerField(default=0, help_text=u"The non-volatile session counter most recently used by this device.")
-    counter = models.PositiveIntegerField(default=0, help_text=u"The volatile session usage counter most recently used by this device.")
+    private_id = models.CharField(max_length=12,
+        validators=[hex_validator(6)],
+        default=lambda: random_hex(6),
+        verbose_name="Private ID",
+        help_text="The 6-byte private ID (hex-encoded)."
+    )
+
+    key = models.CharField(max_length=32,
+        validators=[hex_validator(16)],
+        default=lambda: random_hex(16),
+        help_text="The 16-byte AES key shared with this YubiKey (hex-encoded)."
+    )
+
+    session = models.PositiveIntegerField(
+        default=0,
+        help_text="The non-volatile session counter most recently used by this device."
+    )
+
+    counter = models.PositiveIntegerField(
+        default=0,
+        help_text="The volatile session usage counter most recently used by this device."
+    )
+
+    class Meta(Device.Meta):
+        verbose_name = "Local YubiKey device"
 
     def public_id(self):
         """
@@ -83,16 +104,96 @@ class RemoteYubikeyDevice(Device):
     service. By default, this uses Yubico's hosted validation service, but each
     device can be directed to any other validation service.
 
-    .. attribute:: base_url
-
-        The base URL of the verification service. Defaults to Yubico's hosted API.
-
     .. attribute:: public_id
 
         The public identity of the YubiKey (modhex-encoded).
+
+    .. attribute:: api_version
+
+        The version of the validation API to use. (Default: '2.0')
+
+    .. attribute:: api_id
+
+        Your API ID. The server needs this to sign responsees. (Default: 1)
+
+    .. attribute:: api_key
+
+        Your base64-encoded API key, used to sign requests. This is optional
+        but strongly recommended. (Default: ``None``)
+
+    .. attribute:: use_ssl
+
+        If ``True``, we'll use the HTTPS versions of the default URLs. Because
+        :mod:`urllib2` does not verify certificates, this provides little
+        benefit. (Default: ``False``).
+
+    .. attribute:: param_sl
+
+        The level of syncing required. See :class:`~yubiotp.client.YubiClient20`.
+
+    .. attribute:: param_timeout
+
+        The time to allow for syncing. See :class:`~yubiotp.client.YubiClient20`.
+
+    .. attribute:: base_url
+
+        The base URL of the verification service. Defaults to Yubico's hosted API.
     """
-    base_url = models.URLField(blank=True, default=settings.OTP_YUBIKEY_DEFAULT_BASE_URL, help_text=u"The base URL of the verification service. Defaults to Yubico's hosted API.")
-    public_id = models.CharField(max_length=32, help_text=u"The public identity of the YubiKey (modhex-encoded).")
+    API_VERSIONS = ['1.0', '1.1', '2.0']
+
+    public_id = models.CharField(max_length=32,
+        verbose_name="Public ID",
+        help_text="The public identity of the YubiKey (modhex-encoded)."
+    )
+
+    api_version = models.CharField(max_length=8,
+        choices=zip(API_VERSIONS, API_VERSIONS),
+        default=settings.OTP_YUBIKEY_DEFAULT_API_VERSION,
+        help_text="The version of the validation api to use."
+    )
+
+    api_id = models.IntegerField(
+        default=settings.OTP_YUBIKEY_DEFAULT_API_ID,
+        verbose_name="API ID",
+        help_text="Your API ID."
+    )
+
+    api_key = models.CharField(max_length=64,
+        blank=True,
+        default=settings.OTP_YUBIKEY_DEFAULT_API_KEY,
+        verbose_name="API key",
+        help_text="Your base64-encoded API key."
+    )
+
+    use_ssl = models.BooleanField(
+        default=False,
+        verbose_name="Use SSL",
+        help_text="Use HTTPS API URLs by default?"
+    )
+
+    param_sl = models.CharField(max_length=16,
+        blank=True,
+        default=None,
+        verbose_name="SL",
+        help_text="Level of server syncing required."
+    )
+
+    param_timeout = models.CharField(max_length=16,
+        blank=True,
+        default=None,
+        verbose_name="Timeout",
+        help_text="Sync timeout requested."
+    )
+
+    base_url = models.URLField(
+        blank=True,
+        default=settings.OTP_YUBIKEY_DEFAULT_BASE_URL,
+        verbose_name="Base URL",
+        help_text="The base URL of the verification service. Defaults to Yubico's hosted API."
+    )
+
+    class Meta(Device.Meta):
+        verbose_name = "Remote YubiKey device"
 
     def verify_token(self, token):
         verified = False
@@ -105,22 +206,14 @@ class RemoteYubikeyDevice(Device):
         return verified
 
     def _get_client(self):
-        version = settings.OTP_YUBIKEY_PROTOCOL_VERSION
-        api_id = settings.OTP_YUBIKEY_API_ID
-        api_key = settings.OTP_YUBIKEY_API_KEY
-        ssl = bool(settings.OTP_YUBIKEY_USE_SSL)
+        api_key = b64decode(self.api_key) or None
 
-        if version == '1.0':
-            client = YubiClient10(api_id, api_key, ssl)
-        elif version == '1.1':
-            client = YubiClient11(api_id, api_key, ssl)
-        elif version == '2.0':
-            sl = settings.OTP_YUBIKEY_SL
-            timeout = settings.OTP_YUBIKEY_TIMEOUT
-
-            client = YubiClient20(api_id, api_key, ssl, False, sl, timeout)
+        if self.api_version == '2.0':
+            client = YubiClient20(self.api_id, api_key, self.use_ssl, False, self.param_sl or None, self.param_timeout or None)
+        elif self.api_version == '1.1':
+            client = YubiClient11(self.api_id, api_key, self.use_ssl)
         else:
-            raise ImproperlyConfigured("OTP_YUBIKEY_CLIENT_VERSION must be '1.0', '1.1', or '2.0'.")
+            client = YubiClient10(self.api_id, api_key, self.use_ssl)
 
         if self.base_url:
             client.base_url = self.base_url

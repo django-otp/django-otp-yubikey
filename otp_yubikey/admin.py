@@ -5,12 +5,36 @@ from .models import YubikeyDevice, RemoteYubikeyDevice
 
 
 class YubikeyDeviceAdmin(admin.ModelAdmin):
-    model = YubikeyDevice
+    fieldsets = [
+        ('Identity', {
+            'fields': ['user', 'name', 'confirmed'],
+        }),
+        ('Configuration', {
+            'fields': ['private_id', 'key'],
+        }),
+        ('State', {
+            'fields': ['session', 'counter'],
+        }),
+    ]
+
     list_display = ['user', 'name', 'public_id']
 
 
 class RemoteYubikeyDeviceAdmin(admin.ModelAdmin):
-    model = RemoteYubikeyDevice
+    fieldsets = [
+        ('Identity', {
+            'fields': ['user', 'name', 'confirmed'],
+        }),
+        ('Configuration', {
+            'fields': ['public_id'],
+        }),
+        ('Validation', {
+            'fields': ['api_version', 'api_id', 'api_key', 'use_ssl',
+                       'param_sl', 'param_timeout', 'base_url'],
+        }),
+    ]
+
+    radio_fields = {'api_version': admin.HORIZONTAL}
 
 
 try:

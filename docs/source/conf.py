@@ -44,6 +44,12 @@ django.conf.settings.configure(
     }
 )
 
+intersphinx_mapping = {
+    'http://docs.python.org/': None,
+    'http://packages.python.org/django-otp': None,
+    'http://packages.python.org/YubiOTP/': None,
+}
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -257,7 +263,3 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
-
-
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
