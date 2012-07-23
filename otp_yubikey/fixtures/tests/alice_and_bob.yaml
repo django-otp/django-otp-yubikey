@@ -1,0 +1,53 @@
+- fields:
+    date_joined: 2012-07-15 16:03:02.420965
+    email: alice@example.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-07-17 19:00:09.753345
+    last_name: ''
+    password: sha1$76223$c4f1daa1f2f3a7a3a6737538873ba335c60b5b7d
+    user_permissions: []
+    username: alice
+  model: auth.user
+  pk: 1
+
+- fields:
+    date_joined: 2012-07-15 16:03:02.420965
+    email: bob@example.com
+    first_name: ''
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: 2012-07-17 19:00:09.753345
+    last_name: ''
+    password: sha1$76223$c4f1daa1f2f3a7a3a6737538873ba335c60b5b7d
+    user_permissions: []
+    username: bob
+  model: auth.user
+  pk: 2
+
+- model: otp_yubikey.yubikeydevice
+  pk: 1
+  fields:
+    user: 1
+    name: yubikey
+    confirmed: True
+    private_id: '5dc30490956b'
+    key: 'fb362a0853be5e5306d5cc2483f279cb'
+    session: 5
+    counter: 0
+
+- model: otp_yubikey.yubikeydevice
+  pk: 2
+  fields:
+    user: 2
+    name: yubikey
+    confirmed: True
+    private_id: '326f70826d31'
+    key: '11080a0e7a56d0a1546f327f20626308'
+    session: 10
+    counter: 3

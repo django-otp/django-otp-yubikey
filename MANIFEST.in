@@ -1,0 +1,3 @@
+include CHANGES LICENSE README
+recursive-include docs *
+prune docs/build

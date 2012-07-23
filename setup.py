@@ -17,7 +17,7 @@ setup(
     license='BSD',
     install_requires=[
         'django-otp',
-        'YubiOTP',
+        'YubiOTP>=0.2',
     ],
     classifiers=[
         "Development Status :: 1 - Planning",
