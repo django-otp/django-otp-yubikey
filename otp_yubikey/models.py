@@ -10,8 +10,6 @@ from yubiotp.client import YubiClient10, YubiClient11, YubiClient20
 from yubiotp.modhex import modhex
 from yubiotp.otp import decode_otp
 
-from .conf import settings
-
 
 class YubikeyDevice(Device):
     """
@@ -98,15 +96,16 @@ class YubikeyDevice(Device):
         return True
 
 
-class RemoteYubikeyDevice(Device):
+class ValidationService(models.Model):
     """
-    Represents a YubiKey device that is to be verified with a remote validation
-    service. By default, this uses Yubico's hosted validation service, but each
-    device can be directed to any other validation service.
+    Represents a YubiKey validation web service. By default, this will point to
+    Yubico's official hosted service, which you can customize. You can also
+    create instances to point at any other service implementing the same
+    protocol.
 
-    .. attribute:: public_id
+    .. attribute:: base_url
 
-        The public identity of the YubiKey (modhex-encoded).
+        The base URL of the verification service. Defaults to Yubico's hosted API.
 
     .. attribute:: api_version
 
@@ -119,7 +118,7 @@ class RemoteYubikeyDevice(Device):
     .. attribute:: api_key
 
         Your base64-encoded API key, used to sign requests. This is optional
-        but strongly recommended. (Default: ``None``)
+        but strongly recommended. (Default: ``''``)
 
     .. attribute:: use_ssl
 
@@ -134,35 +133,37 @@ class RemoteYubikeyDevice(Device):
     .. attribute:: param_timeout
 
         The time to allow for syncing. See :class:`~yubiotp.client.YubiClient20`.
-
-    .. attribute:: base_url
-
-        The base URL of the verification service. Defaults to Yubico's hosted API.
     """
     API_VERSIONS = ['1.0', '1.1', '2.0']
 
-    public_id = models.CharField(max_length=32,
-        verbose_name="Public ID",
-        help_text="The public identity of the YubiKey (modhex-encoded)."
-    )
-
-    api_version = models.CharField(max_length=8,
-        choices=zip(API_VERSIONS, API_VERSIONS),
-        default=settings.OTP_YUBIKEY_DEFAULT_API_VERSION,
-        help_text="The version of the validation api to use."
+    name = models.CharField(max_length=32,
+        help_text="The name of this validation service."
     )
 
     api_id = models.IntegerField(
-        default=settings.OTP_YUBIKEY_DEFAULT_API_ID,
+        default=1,
         verbose_name="API ID",
         help_text="Your API ID."
     )
 
     api_key = models.CharField(max_length=64,
         blank=True,
-        default=settings.OTP_YUBIKEY_DEFAULT_API_KEY,
+        default='',
         verbose_name="API key",
         help_text="Your base64-encoded API key."
+    )
+
+    base_url = models.URLField(
+        blank=True,
+        default='',
+        verbose_name="Base URL",
+        help_text="The base URL of the verification service. Defaults to Yubico's hosted API."
+    )
+
+    api_version = models.CharField(max_length=8,
+        choices=zip(API_VERSIONS, API_VERSIONS),
+        default='2.0',
+        help_text="The version of the validation api to use."
     )
 
     use_ssl = models.BooleanField(
@@ -185,27 +186,10 @@ class RemoteYubikeyDevice(Device):
         help_text="Sync timeout requested."
     )
 
-    base_url = models.URLField(
-        blank=True,
-        default=settings.OTP_YUBIKEY_DEFAULT_BASE_URL,
-        verbose_name="Base URL",
-        help_text="The base URL of the verification service. Defaults to Yubico's hosted API."
-    )
+    def __unicode__(self):
+        return self.name
 
-    class Meta(Device.Meta):
-        verbose_name = "Remote YubiKey device"
-
-    def verify_token(self, token):
-        verified = False
-
-        if token[:-32] == self.public_id:
-            client = self._get_client()
-            response = client.verify(token)
-            verified = response.is_ok()
-
-        return verified
-
-    def _get_client(self):
+    def get_client(self):
         api_key = b64decode(self.api_key) or None
 
         if self.api_version == '2.0':
@@ -219,3 +203,34 @@ class RemoteYubikeyDevice(Device):
             client.base_url = self.base_url
 
         return client
+
+
+class RemoteYubikeyDevice(Device):
+    """
+    Represents a YubiKey device that is to be verified with a remote validation
+    service. In order create these devices, you must have at least one
+    :class:`~otp_yubikey.models.ValidationService` in the database.
+
+    .. attribute:: service
+
+        The validation service to use for this device.
+
+    .. attribute:: public_id
+
+        The public identity of the YubiKey (modhex-encoded).
+    """
+    service = models.ForeignKey(ValidationService)
+    public_id = models.CharField(max_length=32, verbose_name="Public ID", help_text="The public identity of the YubiKey (modhex-encoded).")
+
+    class Meta(Device.Meta):
+        verbose_name = "Remote YubiKey device"
+
+    def verify_token(self, token):
+        verified = False
+
+        if token[:-32] == self.public_id:
+            client = self.service.get_client()
+            response = client.verify(token)
+            verified = response.is_ok()
+
+        return verified

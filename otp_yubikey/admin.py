@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.sites import AlreadyRegistered
 
-from .models import YubikeyDevice, RemoteYubikeyDevice
+from .models import YubikeyDevice, ValidationService, RemoteYubikeyDevice
 
 
 class YubikeyDeviceAdmin(admin.ModelAdmin):
@@ -20,25 +20,34 @@ class YubikeyDeviceAdmin(admin.ModelAdmin):
     list_display = ['user', 'name', 'public_id']
 
 
-class RemoteYubikeyDeviceAdmin(admin.ModelAdmin):
+class ValidationServiceAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Identity', {
-            'fields': ['user', 'name', 'confirmed'],
+        ('Common Options', {
+            'fields': ['name', 'api_id', 'api_key'],
         }),
-        ('Configuration', {
-            'fields': ['public_id'],
-        }),
-        ('Validation', {
-            'fields': ['api_version', 'api_id', 'api_key', 'use_ssl',
-                       'param_sl', 'param_timeout', 'base_url'],
+        ('Other Options', {
+            'fields': ['base_url', 'api_version', 'use_ssl', 'param_sl',
+                       'param_timeout'],
         }),
     ]
 
     radio_fields = {'api_version': admin.HORIZONTAL}
 
 
+class RemoteYubikeyDeviceAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Identity', {
+            'fields': ['user', 'name', 'confirmed'],
+        }),
+        ('Configuration', {
+            'fields': ['service', 'public_id'],
+        }),
+    ]
+
+
 try:
     admin.site.register(YubikeyDevice, YubikeyDeviceAdmin)
+    admin.site.register(ValidationService, ValidationServiceAdmin)
     admin.site.register(RemoteYubikeyDevice, RemoteYubikeyDeviceAdmin)
 except AlreadyRegistered:
     # Useless exception triggered by multiple imports.
