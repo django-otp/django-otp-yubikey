@@ -103,13 +103,9 @@ class ValidationService(models.Model):
     create instances to point at any other service implementing the same
     protocol.
 
-    .. attribute:: base_url
+    .. attribute:: name
 
-        The base URL of the verification service. Defaults to Yubico's hosted API.
-
-    .. attribute:: api_version
-
-        The version of the validation API to use. (Default: '2.0')
+        The name of this validation service.
 
     .. attribute:: api_id
 
@@ -119,6 +115,14 @@ class ValidationService(models.Model):
 
         Your base64-encoded API key, used to sign requests. This is optional
         but strongly recommended. (Default: ``''``)
+
+    .. attribute:: base_url
+
+        The base URL of the verification service. Defaults to Yubico's hosted API.
+
+    .. attribute:: api_version
+
+        The version of the validation API to use. (Default: '2.0')
 
     .. attribute:: use_ssl
 
