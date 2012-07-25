@@ -19,3 +19,5 @@ urllib2
 HTTPS
 urls
 #emoteYubiKeyDevice
+ValidationService
+YubiKeys
