@@ -190,6 +190,9 @@ class ValidationService(models.Model):
         help_text="Sync timeout requested."
     )
 
+    class Meta(object):
+        verbose_name = "YubiKey validation service"
+
     def __unicode__(self):
         return self.name
 
