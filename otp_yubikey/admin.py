@@ -5,6 +5,10 @@ from .models import YubikeyDevice, ValidationService, RemoteYubikeyDevice
 
 
 class YubikeyDeviceAdmin(admin.ModelAdmin):
+    """
+    :class:`~django.contrib.admin.ModelAdmin` for
+    :class:`~otp_yubikey.models.YubikeyDevice`.
+    """
     fieldsets = [
         ('Identity', {
             'fields': ['user', 'name', 'confirmed'],
@@ -21,6 +25,10 @@ class YubikeyDeviceAdmin(admin.ModelAdmin):
 
 
 class ValidationServiceAdmin(admin.ModelAdmin):
+    """
+    :class:`~django.contrib.admin.ModelAdmin` for
+    :class:`~otp_yubikey.models.ValidationService`.
+    """
     fieldsets = [
         ('Common Options', {
             'fields': ['name', 'api_id', 'api_key'],
@@ -35,6 +43,10 @@ class ValidationServiceAdmin(admin.ModelAdmin):
 
 
 class RemoteYubikeyDeviceAdmin(admin.ModelAdmin):
+    """
+    :class:`~django.contrib.admin.ModelAdmin` for
+    :class:`~otp_yubikey.models.RemoteYubikeyDevice`.
+    """
     fieldsets = [
         ('Identity', {
             'fields': ['user', 'name', 'confirmed'],

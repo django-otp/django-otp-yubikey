@@ -21,3 +21,9 @@ urls
 #emoteYubiKeyDevice
 ValidationService
 YubiKeys
+admin
+YubikeyDeviceAdmin
+RemoteYubikeyDeviceAdmin
+ValidationServiceAdmin
+contrib
+ModelAdmin
