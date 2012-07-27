@@ -13,23 +13,27 @@ from yubiotp.otp import decode_otp
 
 class YubikeyDevice(Device):
     """
-    Represents a locally-verified YubiKey OTP device.
+    Represents a locally-verified YubiKey OTP
+    :class:`~django_otp.models.Device`.
 
     .. attribute:: private_id
 
-        The 6-byte private ID (hex-encoded).
+        *CharField*: The 6-byte private ID (hex-encoded).
 
     .. attribute:: key
 
-        The 16-byte AES key shared with this YubiKey (hex-encoded).
+        *CharField*: The 16-byte AES key shared with this YubiKey
+        (hex-encoded).
 
     .. attribute:: session
 
-        The non-volatile session counter most recently used by this device.
+        *PositiveIntegerField*: The non-volatile session counter most recently
+        used by this device.
 
     .. attribute:: counter
 
-        The volatile session usage counter most recently used by this device.
+        *PositiveIntegerField: The volatile session usage counter most
+        recently* used by this device.
     """
     private_id = models.CharField(max_length=12,
         validators=[hex_validator(6)],
@@ -105,38 +109,43 @@ class ValidationService(models.Model):
 
     .. attribute:: name
 
-        The name of this validation service.
+        *CharField*: The name of this validation service.
 
     .. attribute:: api_id
 
-        Your API ID. The server needs this to sign responsees. (Default: 1)
+        *IntegerField*: Your API ID. The server needs this to sign responsees.
+        (Default: 1)
 
     .. attribute:: api_key
 
-        Your base64-encoded API key, used to sign requests. This is optional
-        but strongly recommended. (Default: ``''``)
+        *CharField*: Your base64-encoded API key, used to sign requests. This
+        is optional but strongly recommended. (Default: ``''``)
 
     .. attribute:: base_url
 
-        The base URL of the verification service. Defaults to Yubico's hosted API.
+        *URLField*: The base URL of the verification service. Defaults to
+        Yubico's hosted API.
 
     .. attribute:: api_version
 
-        The version of the validation API to use. (Default: '2.0')
+        *CharField*: The version of the validation API to use: '1.0', '1.1', or
+        '2.0'. (Default: '2.0')
 
     .. attribute:: use_ssl
 
-        If ``True``, we'll use the HTTPS versions of the default URLs. Because
-        :mod:`urllib2` does not verify certificates, this provides little
-        benefit. (Default: ``False``).
+        *BooleanField*: If ``True``, we'll use the HTTPS versions of the
+        default URLs. Because :mod:`urllib2` does not verify certificates, this
+        provides little benefit. (Default: ``False``).
 
     .. attribute:: param_sl
 
-        The level of syncing required. See :class:`~yubiotp.client.YubiClient20`.
+        *CharField*: The level of syncing required. See
+        :class:`~yubiotp.client.YubiClient20`.
 
     .. attribute:: param_timeout
 
-        The time to allow for syncing. See :class:`~yubiotp.client.YubiClient20`.
+        *CharField*: The time to allow for syncing. See
+        :class:`~yubiotp.client.YubiClient20`.
     """
     API_VERSIONS = ['1.0', '1.1', '2.0']
 
@@ -180,14 +189,14 @@ class ValidationService(models.Model):
         blank=True,
         default=None,
         verbose_name="SL",
-        help_text="Level of server syncing required."
+        help_text="The level of syncing required."
     )
 
     param_timeout = models.CharField(max_length=16,
         blank=True,
         default=None,
         verbose_name="Timeout",
-        help_text="Sync timeout requested."
+        help_text="The time to allow for syncing."
     )
 
     class Meta(object):
@@ -220,11 +229,11 @@ class RemoteYubikeyDevice(Device):
 
     .. attribute:: service
 
-        The validation service to use for this device.
+        *ForeignKey*: The validation service to use for this device.
 
     .. attribute:: public_id
 
-        The public identity of the YubiKey (modhex-encoded).
+        *CharField*: The public identity of the YubiKey (modhex-encoded).
     """
     service = models.ForeignKey(ValidationService)
     public_id = models.CharField(max_length=32, verbose_name="Public ID", help_text="The public identity of the YubiKey (modhex-encoded).")
