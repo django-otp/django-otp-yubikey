@@ -2,7 +2,7 @@ include CHANGES LICENSE README
 
 recursive-include otp_yubikey/fixtures *
 
-recursive-include docs Makefile *.rst *.py
+recursive-include docs *.rst *.py Makefile
 prune docs/build
 
-global-exclude *.pyc *.pyo
+global-exclude *.pyc *.pyo .*.sw?
