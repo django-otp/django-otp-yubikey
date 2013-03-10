@@ -27,4 +27,4 @@ setup(
         "Topic :: Security",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-) 
+)
