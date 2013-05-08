@@ -1,0 +1,13 @@
+v0.1.1 - May 8, 2013 - Packaging and test cleanup
+-------------------------------------------------
+
+Include fixtures in the installation so the tests pass.
+
+
+v0.1.0 - August 21, 2012 - Initial Release
+------------------------------------------
+
+Initial release.
+
+
+.. vim: ft=rst nospell tw=80

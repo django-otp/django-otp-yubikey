@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 
 
 setup(
     name='django-otp-yubikey',
-    version='0.1.0',
+    version='0.1.1',
     description='A django-otp plugin that verifies YubiKey OTP tokens.',
     long_description=open('README').read(),
     author='Peter Sagerson',
@@ -13,6 +13,7 @@ setup(
     packages=[
         'otp_yubikey',
     ],
+    include_package_data=True,
     url='https://bitbucket.org/psagers/django-otp',
     license='BSD',
     install_requires=[
