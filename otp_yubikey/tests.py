@@ -7,7 +7,7 @@ from yubiotp.otp import encode_otp, YubiKey
 
 
 class YubikeyTest(TestCase):
-    fixtures = ['tests/alice_and_bob']
+    fixtures = ['otp_yubikey/alice_and_bob.yaml']
 
     alice_public = 'cccccccb'
     alice_aes = unhexlify('fb362a0853be5e5306d5cc2483f279cb')
