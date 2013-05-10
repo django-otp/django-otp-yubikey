@@ -34,6 +34,12 @@ sites as well:
 .. autoclass:: otp_yubikey.admin.RemoteYubikeyDeviceAdmin
 
 
+Changes
+-------
+
+:doc:`changes`
+
+
 License
 =======
 

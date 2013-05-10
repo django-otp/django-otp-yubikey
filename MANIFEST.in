@@ -1,8 +1,4 @@
 include CHANGES LICENSE README
 
-recursive-include otp_yubikey/fixtures *
-
 recursive-include docs *.rst *.py Makefile
 prune docs/build
-
-global-exclude *.pyc *.pyo .*.sw?
