@@ -1,14 +1,12 @@
 from binascii import unhexlify
 
-from django.test import TestCase
+from django.db import IntegrityError
 
-from otp_yubikey.models import YubikeyDevice
+from django_otp.tests import TestCase
 from yubiotp.otp import encode_otp, YubiKey
 
 
 class YubikeyTest(TestCase):
-    fixtures = ['otp_yubikey/alice_and_bob.yaml']
-
     alice_public = 'cccccccb'
     alice_aes = unhexlify('fb362a0853be5e5306d5cc2483f279cb')
     alice_key = YubiKey(unhexlify('5dc30490956b'), 6, 0)
@@ -18,8 +16,18 @@ class YubikeyTest(TestCase):
     bob_aes = unhexlify('11080a0e7a56d0a1546f327f20626308')
 
     def setUp(self):
-        self.alice_device = YubikeyDevice.objects.get(user__username='alice')
-        self.bob_device = YubikeyDevice.objects.get(user__username='bob')
+        try:
+            alice = self.create_user('alice', 'password')
+            bob = self.create_user('bob', 'password')
+        except IntegrityError:
+            self.skipTest(u"Unable to create the test user")
+        else:
+            self.alice_device = alice.yubikeydevice_set.create(
+                private_id='5dc30490956b',
+                key='fb362a0853be5e5306d5cc2483f279cb', session=5, counter=0)
+            self.bob_device = bob.yubikeydevice_set.create(
+                private_id='326f70826d31',
+                key='11080a0e7a56d0a1546f327f20626308', session=10, counter=3)
 
     def test_verify_alice(self):
         _, token = self.alice_token()
@@ -89,7 +97,6 @@ class YubikeyTest(TestCase):
         ok = self.alice_device.verify_token('completelybogus')
 
         self.assert_(not ok)
-
 
     def alice_token(self, session=None, counter=None):
         otp = self.alice_key.generate()
