@@ -32,8 +32,8 @@ class YubikeyDevice(Device):
 
     .. attribute:: counter
 
-        *PositiveIntegerField: The volatile session usage counter most
-        recently* used by this device.
+        *PositiveIntegerField*: The volatile session usage counter most
+        recently used by this device.
     """
     private_id = models.CharField(max_length=12,
         validators=[hex_validator(6)],
