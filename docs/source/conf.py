@@ -45,11 +45,11 @@ django.conf.settings.configure(
 )
 
 intersphinx_mapping = {
-    'python': ('http://docs.python.org/', None),
-    'django': ('http://docs.djangoproject.com/en/dev/',
-               'http://docs.djangoproject.com/en/dev/_objects/'),
-    'django-otp': ('http://packages.python.org/django-otp', None),
-    'yubiotp': ('http://packages.python.org/YubiOTP/', None),
+    'python': ('http://docs.python.org/2/', None),
+    'django': ('https://docs.djangoproject.com/en/1.5/',
+               'https://docs.djangoproject.com/en/1.5/_objects/'),
+    'django-otp': ('http://pythonhosted.org/django-otp/', None),
+    'yubiotp': ('http://pythonhosted.org/YubiOTP/', None),
 }
 
 # Add any paths that contain templates here, relative to this directory.
