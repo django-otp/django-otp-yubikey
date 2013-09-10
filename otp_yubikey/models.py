@@ -35,14 +35,16 @@ class YubikeyDevice(Device):
         *PositiveIntegerField*: The volatile session usage counter most
         recently used by this device.
     """
-    private_id = models.CharField(max_length=12,
+    private_id = models.CharField(
+        max_length=12,
         validators=[hex_validator(6)],
         default=lambda: random_hex(6),
         verbose_name="Private ID",
         help_text="The 6-byte private ID (hex-encoded)."
     )
 
-    key = models.CharField(max_length=32,
+    key = models.CharField(
+        max_length=32,
         validators=[hex_validator(16)],
         default=lambda: random_hex(16),
         help_text="The 16-byte AES key shared with this YubiKey (hex-encoded)."
@@ -72,18 +74,18 @@ class YubikeyDevice(Device):
 
     @property
     def bin_key(self):
-        return unhexlify(self.key)
+        return unhexlify(self.key.encode())
 
     def verify_token(self, token):
         try:
             public_id, otp = decode_otp(token, self.bin_key)
-        except StandardError:
+        except Exception:
             return False
 
         if public_id != self.public_id():
             return False
 
-        if hexlify(otp.uid) != self.private_id:
+        if hexlify(otp.uid) != self.private_id.encode():
             return False
 
         if otp.session < self.session:
@@ -149,7 +151,8 @@ class ValidationService(models.Model):
     """
     API_VERSIONS = ['1.0', '1.1', '2.0']
 
-    name = models.CharField(max_length=32,
+    name = models.CharField(
+        max_length=32,
         help_text="The name of this validation service."
     )
 
@@ -159,7 +162,8 @@ class ValidationService(models.Model):
         help_text="Your API ID."
     )
 
-    api_key = models.CharField(max_length=64,
+    api_key = models.CharField(
+        max_length=64,
         blank=True,
         default='',
         verbose_name="API key",
@@ -173,8 +177,9 @@ class ValidationService(models.Model):
         help_text="The base URL of the verification service. Defaults to Yubico's hosted API."
     )
 
-    api_version = models.CharField(max_length=8,
-        choices=zip(API_VERSIONS, API_VERSIONS),
+    api_version = models.CharField(
+        max_length=8,
+        choices=list(zip(API_VERSIONS, API_VERSIONS)),
         default='2.0',
         help_text="The version of the validation api to use."
     )
@@ -185,14 +190,16 @@ class ValidationService(models.Model):
         help_text="Use HTTPS API URLs by default?"
     )
 
-    param_sl = models.CharField(max_length=16,
+    param_sl = models.CharField(
+        max_length=16,
         blank=True,
         default=None,
         verbose_name="SL",
         help_text="The level of syncing required."
     )
 
-    param_timeout = models.CharField(max_length=16,
+    param_timeout = models.CharField(
+        max_length=16,
         blank=True,
         default=None,
         verbose_name="Timeout",
@@ -206,7 +213,7 @@ class ValidationService(models.Model):
         return self.name
 
     def get_client(self):
-        api_key = b64decode(self.api_key) or None
+        api_key = b64decode(self.api_key.encode()) or None
 
         if self.api_version == '2.0':
             client = YubiClient20(self.api_id, api_key, self.use_ssl, False, self.param_sl or None, self.param_timeout or None)
