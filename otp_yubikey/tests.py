@@ -16,7 +16,7 @@ class YubikeyTest(TestCase):
             alice = self.create_user('alice', 'password')
             bob = self.create_user('bob', 'password')
         except IntegrityError:
-            self.skipTest(u"Unable to create the test user")
+            self.skipTest("Unable to create the test user")
         else:
             self.alice_device = alice.yubikeydevice_set.create(
                 private_id='5dc30490956b',
@@ -32,13 +32,13 @@ class YubikeyTest(TestCase):
         _, token = self.alice_token()
         ok = self.alice_device.verify_token(token)
 
-        self.assert_(ok)
+        self.assertTrue(ok)
 
     def test_counter_increment(self):
         otp, token = self.alice_token(5, 7)
         ok = self.alice_device.verify_token(token)
 
-        self.assert_(ok)
+        self.assertTrue(ok)
         self.assertEqual(self.alice_device.session, 5)
         self.assertEqual(self.alice_device.counter, 7)
 
@@ -46,15 +46,15 @@ class YubikeyTest(TestCase):
         _, token = self.alice_token()
         ok = self.bob_device.verify_token(token)
 
-        self.assert_(not ok)
+        self.assertTrue(not ok)
 
     def test_replay(self):
         otp, token = self.alice_token()
         ok1 = self.alice_device.verify_token(token)
         ok2 = self.alice_device.verify_token(token)
 
-        self.assert_(ok1)
-        self.assert_(not ok2)
+        self.assertTrue(ok1)
+        self.assertTrue(not ok2)
         self.assertEqual(self.alice_device.session, otp.session)
         self.assertEqual(self.alice_device.counter, otp.counter)
 
@@ -63,39 +63,39 @@ class YubikeyTest(TestCase):
         otp, token = self.alice_token()
         ok = self.alice_device.verify_token(token)
 
-        self.assert_(not ok)
+        self.assertTrue(not ok)
 
     def test_bad_private_id(self):
-        alice_key = YubiKey(unhexlify('2627dc624cbd'), 6, 0)
+        alice_key = YubiKey(unhexlify(b'2627dc624cbd'), 6, 0)
         otp = alice_key.generate()
         token = encode_otp(otp, self.alice_aes, self.alice_public)
         ok = self.alice_device.verify_token(token)
 
-        self.assert_(not ok)
+        self.assertTrue(not ok)
 
     def test_session_replay(self):
         otp, token = self.alice_token(4, 0)
         ok = self.alice_device.verify_token(token)
 
-        self.assert_(not ok)
+        self.assertTrue(not ok)
 
     def test_counter_replay(self):
         otp, token = self.alice_token(5, 0)
         ok = self.alice_device.verify_token(token)
 
-        self.assert_(not ok)
+        self.assertTrue(not ok)
 
     def test_bad_decrypt(self):
         otp = self.alice_key.generate()
         token = encode_otp(otp, self.bob_aes, self.alice_public)
         ok = self.alice_device.verify_token(token)
 
-        self.assert_(not ok)
+        self.assertTrue(not ok)
 
     def test_bogus_token(self):
         ok = self.alice_device.verify_token('completelybogus')
 
-        self.assert_(not ok)
+        self.assertTrue(not ok)
 
     def alice_token(self, session=None, counter=None):
         otp = self.alice_key.generate()
