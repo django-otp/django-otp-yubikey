@@ -1,14 +1,21 @@
+v0.1.3 - October 2, 2013 - Unit test fixes
+------------------------------------------
+
+- The move away from fixtures inadvertantly made the tests sensitive to the
+  primary keys allocated by the database.
+
+
 v0.1.2 - May 9, 2013 - Unit test improvements
 ---------------------------------------------
 
-Major unit test cleanup. Tests should pass or be skipped under all supported
-versions of Django, with or without custom users and timzeone support.
+- Major unit test cleanup. Tests should pass or be skipped under all supported
+  versions of Django, with or without custom users and timzeone support.
 
 
 v0.1.1 - May 8, 2013 - Packaging and test cleanup
 -------------------------------------------------
 
-Include fixtures in the installation so the tests pass.
+- Include fixtures in the installation so the tests pass.
 
 
 v0.1.0 - August 21, 2012 - Initial Release
