@@ -1,7 +1,7 @@
 django-otp-yubikey
 ==================
 
-.. include:: ../../README
+.. include:: ../../README.rst
 
 Local Verification
 ------------------
