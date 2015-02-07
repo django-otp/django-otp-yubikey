@@ -11,6 +11,22 @@ from yubiotp.modhex import modhex
 from yubiotp.otp import decode_otp
 
 
+def default_id():
+    return random_hex(6)
+
+
+def id_validator(value):
+    return hex_validator(6)(value)
+
+
+def default_key():
+    return random_hex(16)
+
+
+def key_validator(value):
+    return hex_validator(16)(value)
+
+
 class YubikeyDevice(Device):
     """
     Represents a locally-verified YubiKey OTP
@@ -37,16 +53,16 @@ class YubikeyDevice(Device):
     """
     private_id = models.CharField(
         max_length=12,
-        validators=[hex_validator(6)],
-        default=lambda: random_hex(6),
+        validators=[id_validator],
+        default=default_id,
         verbose_name="Private ID",
         help_text="The 6-byte private ID (hex-encoded)."
     )
 
     key = models.CharField(
         max_length=32,
-        validators=[hex_validator(16)],
-        default=lambda: random_hex(16),
+        validators=[key_validator],
+        default=default_key,
         help_text="The 16-byte AES key shared with this YubiKey (hex-encoded)."
     )
 
