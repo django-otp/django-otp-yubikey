@@ -1,3 +1,12 @@
+v0.3.0 - February 7, 2015 - Support Django migrations
+-----------------------------------------------------
+
+- otp_yubikey now has both Django and South migrations. Please see the `upgrade
+  notes`_ for details on upgrading from previous versions.
+
+.. _upgrade notes: https://pythonhosted.org/django-otp/overview.html#upgrading
+
+
 v0.2.0 - November 10, 2013 - Django 1.6
 ---------------------------------------
 
