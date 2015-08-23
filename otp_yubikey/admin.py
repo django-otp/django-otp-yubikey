@@ -9,6 +9,8 @@ class YubikeyDeviceAdmin(admin.ModelAdmin):
     :class:`~django.contrib.admin.ModelAdmin` for
     :class:`~otp_yubikey.models.YubikeyDevice`.
     """
+    list_display = ['user', 'name', 'public_id']
+
     fieldsets = [
         ('Identity', {
             'fields': ['user', 'name', 'confirmed'],
@@ -20,8 +22,7 @@ class YubikeyDeviceAdmin(admin.ModelAdmin):
             'fields': ['session', 'counter'],
         }),
     ]
-
-    list_display = ['user', 'name', 'public_id']
+    raw_id_fields = ['user']
 
 
 class ValidationServiceAdmin(admin.ModelAdmin):
@@ -38,7 +39,6 @@ class ValidationServiceAdmin(admin.ModelAdmin):
                        'param_timeout'],
         }),
     ]
-
     radio_fields = {'api_version': admin.HORIZONTAL}
 
 
@@ -55,6 +55,7 @@ class RemoteYubikeyDeviceAdmin(admin.ModelAdmin):
             'fields': ['service', 'public_id'],
         }),
     ]
+    raw_id_fields = ['user']
 
 
 try:
