@@ -1,3 +1,9 @@
+v0.3.2 - October 11, 2015 - Admin
+---------------------------------
+
+- Use ModelAdmin.raw_id_fields for foreign keys to users.
+
+
 v0.3.0 - February 7, 2015 - Support Django migrations
 -----------------------------------------------------
 
