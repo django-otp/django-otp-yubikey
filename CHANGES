@@ -1,3 +1,9 @@
+v0.3.4 - July 23, 2016 - YubiKey fix
+------------------------------------
+
+- Fix for YubiKey token encoding on Python 3.
+
+
 v0.3.3 - January 10, 2016 - Python 3 cleanup
 --------------------------------------------
 
