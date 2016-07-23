@@ -36,6 +36,12 @@ class YubikeyTest(TestCase):
 
         self.assertTrue(ok)
 
+    def test_verify_unicode(self):
+        _, token = self.alice_token()
+        ok = self.alice_device.verify_token(token.decode('ascii'))
+
+        self.assertTrue(ok)
+
     def test_counter_increment(self):
         otp, token = self.alice_token(5, 7)
         ok = self.alice_device.verify_token(token)

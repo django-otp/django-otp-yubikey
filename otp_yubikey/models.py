@@ -5,6 +5,7 @@ from binascii import hexlify, unhexlify
 from struct import pack
 
 from django.db import models
+from django.utils import six
 
 from django_otp.models import Device
 from django_otp.util import hex_validator, random_hex
@@ -95,6 +96,9 @@ class YubikeyDevice(Device):
         return unhexlify(self.key.encode())
 
     def verify_token(self, token):
+        if isinstance(token, six.text_type):
+            token = token.encode('utf-8')
+
         try:
             public_id, otp = decode_otp(token, self.bin_key)
         except Exception:
