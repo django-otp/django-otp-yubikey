@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('key', models.CharField(default=otp_yubikey.models.default_key, help_text='The 16-byte AES key shared with this YubiKey (hex-encoded).', max_length=32, validators=[otp_yubikey.models.key_validator])),
                 ('session', models.PositiveIntegerField(default=0, help_text='The non-volatile session counter most recently used by this device.')),
                 ('counter', models.PositiveIntegerField(default=0, help_text='The volatile session usage counter most recently used by this device.')),
-                ('user', models.ForeignKey(help_text='The user that this device belongs to.', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(help_text='The user that this device belongs to.', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'abstract': False,
@@ -66,13 +66,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='remoteyubikeydevice',
             name='service',
-            field=models.ForeignKey(to='otp_yubikey.ValidationService'),
+            field=models.ForeignKey(to='otp_yubikey.ValidationService', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='remoteyubikeydevice',
             name='user',
-            field=models.ForeignKey(help_text='The user that this device belongs to.', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(help_text='The user that this device belongs to.', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]
