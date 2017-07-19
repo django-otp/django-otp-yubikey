@@ -9,12 +9,6 @@ another to verify them against a `web service
 See `django-otp <http://pypi.python.org/pypi/django-otp>`_ for more information
 on the OTP framework.
 
-This version is supported on Python 2.6, 2.7, and 3.3+; and Django >= 1.4.
-
-.. warning::
-
-    otp_yubikey now contains both South and Django migrations. If you're using
-    South or upgrading to Django 1.7, please see the `upgrade notes`_ in the
-    django-otp documentation first.
+This version is supported on Python 2.7 and 3.4+; and Django 1.8 and 1.10+.
 
 .. _upgrade notes: https://pythonhosted.org/django-otp/overview.html#upgrading
