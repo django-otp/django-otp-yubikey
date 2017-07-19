@@ -1,5 +1,7 @@
 .. vim: ft=rst nospell tw=80
 
+`Package Documentation <http://django-otp-yubikey.readthedocs.io/>`_
+
 This is a django-otp plugin that handles `YubiKey
 <http://www.yubico.com/yubikey>`_ devices using the Yubico OTP algorithm. This
 includes two device definitions: one to verify YubiKey tokens locally and
