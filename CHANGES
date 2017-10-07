@@ -1,3 +1,9 @@
+v0.4.2 - October 7, 2017 - Forward compatibility
+------------------------------------------------
+
+- Resolve deprecation warnings for forward compatibility.
+
+
 v0.4.1 - August 29, 2017 - Default keys
 ---------------------------------------
 
