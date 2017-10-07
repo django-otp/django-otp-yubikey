@@ -265,7 +265,7 @@ class RemoteYubikeyDevice(Device):
 
         *CharField*: The public identity of the YubiKey (modhex-encoded).
     """
-    service = models.ForeignKey(ValidationService)
+    service = models.ForeignKey(ValidationService, on_delete=models.CASCADE)
     public_id = models.CharField(max_length=32, verbose_name="Public ID", help_text="The public identity of the YubiKey (modhex-encoded).")
 
     class Meta(Device.Meta):
