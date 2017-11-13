@@ -3,6 +3,29 @@ django-otp-yubikey
 
 .. include:: ../../README.rst
 
+
+Installation
+------------
+
+django-otp-yubikey can be installed via pip:
+
+  pip install django-otp-yubikey
+
+
+Once installed it should be added to INSTALLED_APPS after django_otp core:
+
+
+  INSTALLED_APPS = [
+  ...
+  'django_otp',
+  'django_otp.plugins.otp_totp',
+  'django_otp.plugins.otp_hotp',
+  'django_otp.plugins.otp_static',
+
+  'otp_yubikey',
+  ]
+
+
 Local Verification
 ------------------
 
