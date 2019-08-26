@@ -1,23 +1,20 @@
 #!/usr/bin/env python
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 
 setup(
     name='django-otp-yubikey',
     version='0.5.0',
     description='A django-otp plugin that verifies YubiKey OTP tokens.',
-    long_description=open('README.rst').read(),
     author='Peter Sagerson',
-    author_email='psagersDjwublJf@ignorare.net',
-    packages=find_packages(),
-    include_package_data=True,
-    url='https://bitbucket.org/psagers/django-otp',
+    author_email='psagers@ignorare.net',
+    url='https://github.com/django-otp/django-otp-yubikey',
+    project_urls={
+        "Documentation": 'https://django-otp-yubikey.readthedocs.io/',
+        "Source": 'https://github.com/django-otp/django-otp-yubikey',
+    },
     license='BSD',
-    install_requires=[
-        'django-otp >= 0.5.0',
-        'YubiOTP >= 0.2.2',
-    ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 2",
@@ -27,5 +24,12 @@ setup(
         "Topic :: Security",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Framework :: Django",
+    ],
+
+    package_dir={'': 'src'},
+    packages=find_packages(where='src'),
+    install_requires=[
+        'django-otp >= 0.5.0',
+        'YubiOTP >= 0.2.2',
     ],
 )

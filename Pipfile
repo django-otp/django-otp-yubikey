@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+isort = "*"
+flake8 = "*"
+django = "*"
+setuptools = "*"
+wheel = "*"
+twine = "*"
+sphinx = "*"
+django-otp-yubikey = {editable = true,path = "."}
+
+[packages]
+
+[requires]
+python_version = "3.7"

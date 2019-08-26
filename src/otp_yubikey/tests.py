@@ -5,7 +5,7 @@ from binascii import unhexlify
 from django.db import IntegrityError
 
 from django_otp.tests import TestCase
-from yubiotp.otp import encode_otp, YubiKey
+from yubiotp.otp import YubiKey, encode_otp
 
 
 class YubikeyTest(TestCase):

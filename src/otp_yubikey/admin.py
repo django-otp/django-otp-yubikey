@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django.contrib import admin
 from django.contrib.admin.sites import AlreadyRegistered
 
-from .models import YubikeyDevice, ValidationService, RemoteYubikeyDevice
+from .models import RemoteYubikeyDevice, ValidationService, YubikeyDevice
 
 
 class YubikeyDeviceAdmin(admin.ModelAdmin):

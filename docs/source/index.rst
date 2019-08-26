@@ -7,12 +7,12 @@ django-otp-yubikey
 Installation
 ------------
 
-django-otp-yubikey can be installed via pip:
+django-otp-yubikey can be installed via pip::
 
     pip install django-otp-yubikey
 
 
-Once installed it should be added to INSTALLED_APPS after django_otp core:
+Once installed it should be added to INSTALLED_APPS after django_otp core::
 
     INSTALLED_APPS = [
         ...
