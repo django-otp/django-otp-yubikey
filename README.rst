@@ -17,8 +17,4 @@ another to verify them against a `web service
 See `django-otp <https://pypi.org/project/django-otp>`_ for more information on
 the OTP framework.
 
-* Repository: https://github.com/django-otp/django-otp-yubikey
-* Documentation: https://django-otp-yubikey.readthedocs.io/
-* Mailing list: https://groups.google.com/forum/#!forum/django-otp
-
 .. _upgrade notes: https://django-otp-yubikey.readthedocs.io/#upgrading
