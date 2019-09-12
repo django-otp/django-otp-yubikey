@@ -1,3 +1,9 @@
+v0.5.2 - September 12, 2019 - Preliminary Django 3.0 support
+------------------------------------------------------------
+
+Removed dependencies on Python 2 compatibility shims in Django < 3.0.
+
+
 v0.5.1 - August 26, 2019 - Housekeeping
 ---------------------------------------
 

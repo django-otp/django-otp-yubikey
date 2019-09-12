@@ -4,8 +4,9 @@ from base64 import b64decode
 from binascii import hexlify, unhexlify
 from struct import pack
 
+import six
+
 from django.db import models
-from django.utils import six
 from django.utils.encoding import force_text
 
 from django_otp.models import Device
