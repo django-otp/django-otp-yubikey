@@ -1,10 +1,6 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from base64 import b64decode
 from binascii import hexlify, unhexlify
 from struct import pack
-
-import six
 
 from django.db import models
 from django.utils.encoding import force_text
@@ -98,7 +94,7 @@ class YubikeyDevice(Device):
         return unhexlify(self.key.encode())
 
     def verify_token(self, token):
-        if isinstance(token, six.text_type):
+        if isinstance(token, str):
             token = token.encode('utf-8')
 
         try:
