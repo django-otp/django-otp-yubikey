@@ -160,8 +160,7 @@ class ValidationService(models.Model):
     .. attribute:: use_ssl
 
         *BooleanField*: If ``True``, we'll use the HTTPS versions of the
-        default URLs. Because :mod:`urllib2` does not verify certificates, this
-        provides little benefit. (Default: ``False``).
+        default URLs. (Default: ``True``).
 
     .. attribute:: param_sl
 
@@ -209,7 +208,7 @@ class ValidationService(models.Model):
     )
 
     use_ssl = models.BooleanField(
-        default=False,
+        default=True,
         verbose_name="Use SSL",
         help_text="Use HTTPS API URLs by default?"
     )
