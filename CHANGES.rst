@@ -1,3 +1,13 @@
+v0.6.0 - July 23, 2020 - Require TLS by default
+-------------------------------------------------------------------------------
+
+- Validation services require TLS by default. Python now (for some time)
+  verifies server certificates.
+
+- Removed vestigial Python 2 support. Updated the test matrix to match
+  django-otp.
+
+
 v0.5.2 - September 12, 2019 - Preliminary Django 3.0 support
 ------------------------------------------------------------
 
@@ -8,6 +18,7 @@ v0.5.1 - August 26, 2019 - Housekeeping
 ---------------------------------------
 
 Build, test, and documentation cleanup.
+
 
 v0.5.0 - August 14, 2018 - Django 2.1 support
 ---------------------------------------------

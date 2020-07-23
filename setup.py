@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='django-otp-yubikey',
-    version='0.5.2',
+    version='0.6.0',
     description='A django-otp plugin that verifies YubiKey OTP tokens.',
     author='Peter Sagerson',
     author_email='psagers@ignorare.net',
@@ -31,6 +31,5 @@ setup(
     install_requires=[
         'django-otp >= 0.5.0',
         'YubiOTP >= 0.2.2',
-        'six >= 1.10.0',
     ],
 )
