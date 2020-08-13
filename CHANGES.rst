@@ -1,3 +1,11 @@
+Unreleased - Update supported Django verisons
+--------------------------------------------------------------------------------
+
+- Dropped support for Django < 2.2.
+
+- Version bumped to align with the core django-otp project.
+
+
 v0.6.0 - July 23, 2020 - Require TLS by default
 -------------------------------------------------------------------------------
 
