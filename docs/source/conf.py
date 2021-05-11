@@ -55,7 +55,8 @@ django.conf.settings.configure(
 
         'django_otp',
         'otp_yubikey',
-    ]
+    ],
+    SECRET_KEY='properly-configured',
 )
 django.setup()
 
