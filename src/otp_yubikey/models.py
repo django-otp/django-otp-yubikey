@@ -2,14 +2,14 @@ from base64 import b64decode
 from binascii import hexlify, unhexlify
 from struct import pack
 
-from django.db import models
-from django.utils.encoding import force_str
-
 from django_otp.models import Device
 from django_otp.util import hex_validator, random_hex
 from yubiotp.client import YubiClient10, YubiClient11, YubiClient20
 from yubiotp.modhex import modhex
 from yubiotp.otp import decode_otp
+
+from django.db import models
+from django.utils.encoding import force_str
 
 
 def default_id():
@@ -52,29 +52,30 @@ class YubikeyDevice(Device):
         *PositiveIntegerField*: The volatile session usage counter most
         recently used by this device.
     """
+
     private_id = models.CharField(
         max_length=12,
         validators=[id_validator],
         default=default_id,
         verbose_name="Private ID",
-        help_text="The 6-byte private ID (hex-encoded)."
+        help_text="The 6-byte private ID (hex-encoded).",
     )
 
     key = models.CharField(
         max_length=32,
         validators=[key_validator],
         default=default_key,
-        help_text="The 16-byte AES key shared with this YubiKey (hex-encoded)."
+        help_text="The 16-byte AES key shared with this YubiKey (hex-encoded).",
     )
 
     session = models.PositiveIntegerField(
         default=0,
-        help_text="The non-volatile session counter most recently used by this device."
+        help_text="The non-volatile session counter most recently used by this device.",
     )
 
     counter = models.PositiveIntegerField(
         default=0,
-        help_text="The volatile session usage counter most recently used by this device."
+        help_text="The volatile session usage counter most recently used by this device.",
     )
 
     class Meta(Device.Meta):
@@ -86,6 +87,7 @@ class YubikeyDevice(Device):
         modhex-encoded primary key.
         """
         return modhex(pack('>I', self.id))
+
     public_id.short_description = 'Public Identity'
     public_id.admin_order_field = 'id'
 
@@ -168,17 +170,15 @@ class ValidationService(models.Model):
         *CharField*: The time to allow for syncing. See
         :class:`~yubiotp.client.YubiClient20`.
     """
+
     API_VERSIONS = ['1.0', '1.1', '2.0']
 
     name = models.CharField(
-        max_length=32,
-        help_text="The name of this validation service."
+        max_length=32, help_text="The name of this validation service."
     )
 
     api_id = models.IntegerField(
-        default=1,
-        verbose_name="API ID",
-        help_text="Your API ID."
+        default=1, verbose_name="API ID", help_text="Your API ID."
     )
 
     api_key = models.CharField(
@@ -186,27 +186,25 @@ class ValidationService(models.Model):
         blank=True,
         default='',
         verbose_name="API key",
-        help_text="Your base64-encoded API key."
+        help_text="Your base64-encoded API key.",
     )
 
     base_url = models.URLField(
         blank=True,
         default='',
         verbose_name="Base URL",
-        help_text="The base URL of the verification service. Defaults to Yubico's hosted API."
+        help_text="The base URL of the verification service. Defaults to Yubico's hosted API.",
     )
 
     api_version = models.CharField(
         max_length=8,
         choices=list(zip(API_VERSIONS, API_VERSIONS)),
         default='2.0',
-        help_text="The version of the validation api to use."
+        help_text="The version of the validation api to use.",
     )
 
     use_ssl = models.BooleanField(
-        default=True,
-        verbose_name="Use SSL",
-        help_text="Use HTTPS API URLs by default?"
+        default=True, verbose_name="Use SSL", help_text="Use HTTPS API URLs by default?"
     )
 
     param_sl = models.CharField(
@@ -214,7 +212,7 @@ class ValidationService(models.Model):
         blank=True,
         default=None,
         verbose_name="SL",
-        help_text="The level of syncing required."
+        help_text="The level of syncing required.",
     )
 
     param_timeout = models.CharField(
@@ -222,7 +220,7 @@ class ValidationService(models.Model):
         blank=True,
         default=None,
         verbose_name="Timeout",
-        help_text="The time to allow for syncing."
+        help_text="The time to allow for syncing.",
     )
 
     class Meta(object):
@@ -235,7 +233,14 @@ class ValidationService(models.Model):
         api_key = b64decode(self.api_key.encode()) or None
 
         if self.api_version == '2.0':
-            client = YubiClient20(self.api_id, api_key, self.use_ssl, False, self.param_sl or None, self.param_timeout or None)
+            client = YubiClient20(
+                self.api_id,
+                api_key,
+                self.use_ssl,
+                False,
+                self.param_sl or None,
+                self.param_timeout or None,
+            )
         elif self.api_version == '1.1':
             client = YubiClient11(self.api_id, api_key, self.use_ssl)
         else:
@@ -261,8 +266,13 @@ class RemoteYubikeyDevice(Device):
 
         *CharField*: The public identity of the YubiKey (modhex-encoded).
     """
+
     service = models.ForeignKey(ValidationService, on_delete=models.CASCADE)
-    public_id = models.CharField(max_length=32, verbose_name="Public ID", help_text="The public identity of the YubiKey (modhex-encoded).")
+    public_id = models.CharField(
+        max_length=32,
+        verbose_name="Public ID",
+        help_text="The public identity of the YubiKey (modhex-encoded).",
+    )
 
     class Meta(Device.Meta):
         verbose_name = "Remote YubiKey device"

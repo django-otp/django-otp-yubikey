@@ -1,9 +1,9 @@
 from binascii import unhexlify
 
-from django.db import IntegrityError
-
 from django_otp.tests import TestCase
 from yubiotp.otp import YubiKey, encode_otp
+
+from django.db import IntegrityError
 
 
 class YubikeyTest(TestCase):
@@ -20,12 +20,18 @@ class YubikeyTest(TestCase):
         else:
             self.alice_device = alice.yubikeydevice_set.create(
                 private_id='5dc30490956b',
-                key='fb362a0853be5e5306d5cc2483f279cb', session=5, counter=0)
+                key='fb362a0853be5e5306d5cc2483f279cb',
+                session=5,
+                counter=0,
+            )
             self.alice_public = self.alice_device.public_id()
 
             self.bob_device = bob.yubikeydevice_set.create(
                 private_id='326f70826d31',
-                key='11080a0e7a56d0a1546f327f20626308', session=10, counter=3)
+                key='11080a0e7a56d0a1546f327f20626308',
+                session=10,
+                counter=3,
+            )
             self.bob_public = self.bob_device.public_id()
 
     def test_verify_alice(self):

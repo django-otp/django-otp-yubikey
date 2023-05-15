@@ -2,17 +2,13 @@ django-otp-yubikey
 ==================
 
 .. include:: ../../README.rst
+   :end-before: .. end-of-doc-intro
 
 
 Installation
 ------------
 
-django-otp-yubikey can be installed via pip::
-
-    pip install django-otp-yubikey
-
-
-Once installed it should be added to INSTALLED_APPS after django_otp core::
+Add otp_yubikey to INSTALLED_APPS after django_otp core::
 
     INSTALLED_APPS = [
         ...
@@ -29,17 +25,17 @@ Local Verification
 ------------------
 
 .. autoclass:: otp_yubikey.models.YubikeyDevice
-    :members:
+   :members:
 
 
 Remote Verification
 -------------------
 
 .. autoclass:: otp_yubikey.models.ValidationService
-    :members:
+   :members:
 
 .. autoclass:: otp_yubikey.models.RemoteYubikeyDevice
-    :members:
+   :members:
 
 
 Admin
