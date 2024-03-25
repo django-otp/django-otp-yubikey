@@ -20,7 +20,7 @@ classifiers = [
 ]
 dependencies = [
     "django-otp~=1.0",
-    "YubiOTP~=0.2",
+    "YubiOTP~=1.0",
 ]
 
 [project.urls]
