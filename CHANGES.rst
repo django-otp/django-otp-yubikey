@@ -1,4 +1,4 @@
-Unreleased - Tooling
+v1.1.0 - March 25, 2024 - Tooling
 --------------------------------------------------------------------------------
 
 This project is now managed with `hatch`_, which replaces setuptools, pipenv,

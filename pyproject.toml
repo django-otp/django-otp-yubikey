@@ -1,6 +1,6 @@
 [project]
 name = "django-otp-yubikey"
-version = "1.0.1"
+version = "1.1.0"
 description = "A django-otp plugin that verifies YubiKey OTP tokens."
 readme = "README.rst"
 requires-python = ">=3.7"
