@@ -1,6 +1,6 @@
 from binascii import unhexlify
 
-from django_otp.tests import TestCase
+from django_otp.test_utils import TestCase
 from yubiotp.otp import YubiKey, encode_otp
 
 from django.db import IntegrityError
